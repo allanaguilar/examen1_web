@@ -68,8 +68,8 @@
                 <!--<input type="text" id="actividad_seleccionada" name="actividad_seleccionada" value="" />-->
                 <form id="form_generar_reporte" class="form-horizontal"  style="margin:34px auto" action="index.jsp">
                     <label class="mr-sm-2" for="inlineFormCustomSelectPref">Tipo de Actividad</label>
-                    <select name="actividad" class="custom-select mb-2 mr-sm-2 mb-sm-0" id="actividad">
-                        <option selected="selected" value="<%=request.getParameter("actividad")%>"><%=request.getParameter("actividad")%></option> 
+                    <select name="actividad_sel" class="custom-select mb-2 mr-sm-2 mb-sm-0" id="actividad">
+                        <option selected="selected" value="<%=request.getParameter("actividad_sel")%>"><%=request.getParameter("actividad_sel")%></option> 
                         <%
                             try {
                                 Dba db = new Dba(application.getRealPath("ExamenPrimerParcial.mdb"));
@@ -109,7 +109,7 @@
                         try {
                             Dba db = new Dba(application.getRealPath("ExamenPrimerParcial.mdb"));
                             db.conectar();
-                            db.query.execute("SELECT TP.clase_social_persona,G.nombre,G.apellido,TP.actividad,TP.duracion,TP.id_persona FROM tareas_personas AS TP INNER JOIN Gente AS G ON G.id = TP.id_persona where TP.actividad = '" + request.getParameter("actividad") + "' ORDER BY G.nombre,G.apellido");
+                            db.query.execute("SELECT TP.clase_social_persona,G.nombre,G.apellido,TP.actividad,TP.duracion,TP.id_persona FROM tareas_personas AS TP INNER JOIN Gente AS G ON G.id = TP.id_persona where TP.actividad = '" + request.getParameter("actividad_sel") + "' ORDER BY G.nombre,G.apellido");
                             ResultSet rs = db.query.getResultSet();
                             while (rs.next()) {%>
                     <tr> 
@@ -173,7 +173,6 @@
                             });
                     location.reload();
                 });
-//                var actividad = "";
 
             </script>
     </body>
