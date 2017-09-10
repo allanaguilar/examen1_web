@@ -109,17 +109,17 @@
                         try {
                             Dba db = new Dba(application.getRealPath("ExamenPrimerParcial.mdb"));
                             db.conectar();
-                            db.query.execute("select * from tareas_personas INNER JOIN Gente ON Gente.id = tareas_personas.id_persona where actividad = '" + request.getParameter("actividad") + "'");
+                            db.query.execute("SELECT TP.clase_social_persona,G.nombre,G.apellido,TP.actividad,TP.duracion FROM tareas_personas AS TP INNER JOIN Gente AS G ON G.id = TP.id_persona where TP.actividad = '" + request.getParameter("actividad") + "'");
 //                            db.query.execute("select * from tareas_personas where actividad = 'Bailar' "); 
                             ResultSet rs = db.query.getResultSet();
                             while (rs.next()) {%>
                     <tr> 
-                        <td><%=rs.getString(2)%></td> 
-                        <td><%=rs.getString(5)%> <%=rs.getString(6)%></td>
-                        <td><%=rs.getString(3)%></td > 
-                        <td><%=rs.getString(4)%></td >
+                        <td><%=rs.getString(1)%></td> 
+                        <td><%=rs.getString(2)%> <%=rs.getString(3)%></td>
+                        <td><%=rs.getString(4)%></td > 
+                        <td><%=rs.getString(5)%></td >
                         <!--<td><a href="modificar.jsp?p_idact=<%=request.getParameter("tipoActividad")%>">Modificar Actividad</a></td>-->
-                        <td><a href="#" class="modificar">Modificar Actividad</a></td>
+                        <td><a href="#" id="<%=rs.getString(3)%>" class="modificar">Modificar Actividad</a></td>
                     </tr>         
                     <%
                             }
@@ -138,20 +138,22 @@
             <script>
 
                 $('#exampleModal').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget) // Button that triggered the modal
-                    var recipient = button.data('whatever') // Extract info from data-* attributes
+                    var button = $(event.relatedTarget); // Button that triggered the modal
+                    var recipient = button.data('whatever'); // Extract info from data-* attributes
                     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
                     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-                    var modal = $(this)
-                    modal.find('.modal-title').text('New message to ' + recipient)
-                    modal.find('.modal-body input').val(recipient)
-                })
+                    var modal = $(this);
+                    modal.find('.modal-title').text('New message to ' + recipient);
+                    modal.find('.modal-body input').val(recipient);
+                });
 
                 $(".btn-generar").click(function () {
 //                    $("#actividad_seleccionada").text($("#actividad").val());
                 });
 
                 $(".modificar").click(function () {
+                    var answerid = $(this).attr('id');
+                    alert("actividad: " + answerid);
                     $("#modal").collapse("show");
                 });
 
