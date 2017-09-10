@@ -109,8 +109,7 @@
                         try {
                             Dba db = new Dba(application.getRealPath("ExamenPrimerParcial.mdb"));
                             db.conectar();
-                            db.query.execute("SELECT TP.clase_social_persona,G.nombre,G.apellido,TP.actividad,TP.duracion FROM tareas_personas AS TP INNER JOIN Gente AS G ON G.id = TP.id_persona where TP.actividad = '" + request.getParameter("actividad") + "'");
-//                            db.query.execute("select * from tareas_personas where actividad = 'Bailar' "); 
+                            db.query.execute("SELECT TP.clase_social_persona,G.nombre,G.apellido,TP.actividad,TP.duracion,TP.id_persona FROM tareas_personas AS TP INNER JOIN Gente AS G ON G.id = TP.id_persona where TP.actividad = '" + request.getParameter("actividad") + "' ORDER BY G.nombre,G.apellido");
                             ResultSet rs = db.query.getResultSet();
                             while (rs.next()) {%>
                     <tr> 
@@ -118,8 +117,7 @@
                         <td><%=rs.getString(2)%> <%=rs.getString(3)%></td>
                         <td><%=rs.getString(4)%></td > 
                         <td><%=rs.getString(5)%></td >
-                        <!--<td><a href="modificar.jsp?p_idact=<%=request.getParameter("tipoActividad")%>">Modificar Actividad</a></td>-->
-                        <td><a href="#" id="<%=rs.getString(3)%>" class="modificar">Modificar Actividad</a></td>
+                        <td><a href="#" id="<%=rs.getString(6) + ',' + rs.getString(4) %>" class="modificar">Modificar Actividad</a></td>
                     </tr>         
                     <%
                             }
@@ -136,7 +134,7 @@
             </div>
 
             <script>
-
+                var array;
                 $('#exampleModal').on('show.bs.modal', function (event) {
                     var button = $(event.relatedTarget); // Button that triggered the modal
                     var recipient = button.data('whatever'); // Extract info from data-* attributes
@@ -152,8 +150,9 @@
                 });
 
                 $(".modificar").click(function () {
-                    var answerid = $(this).attr('id');
-                    alert("actividad: " + answerid);
+                    array = $(this).attr('id');
+//                    array = array.split(",");
+//                    alert("datos: " + array[0] + " y " + array[1] + "  === " + array);
                     $("#modal").collapse("show");
                 });
 
@@ -163,17 +162,18 @@
 
                 $(".btn-modificar").click(function () {
                     $("#modal").collapse("hide");
-
+//                    var array = $(this).attr('id');
+                    array = array.split(",");
                     // Stop form from submitting normally
                     event.preventDefault();
-                    $.post("http://localhost:9999/EXAMEN1_10821092/modificar.jsp", {nuevo_valor: $("#nuevo_valor").val(), actividad: $("#actividad").val()})
+                    $.post("http://localhost:9999/EXAMEN1_10821092/modificar.jsp", {nuevo_valor: $("#nuevo_valor").val(), persona: array[0], actividad: array[1]})
                             .done(function (data) {
 //                                alert(data);
                                 console.log(data);
                             });
                     location.reload();
                 });
-                var actividad = "";
+//                var actividad = "";
 
             </script>
     </body>

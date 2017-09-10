@@ -20,9 +20,10 @@
             db.conectar();
             int contador=db.query.executeUpdate("UPDATE tareas_personas "
                 + "SET duracion='"+request.getParameter("nuevo_valor") + "'"
-                + "WHERE actividad='"+ request.getParameter("actividad")+"' ");
+                + "WHERE actividad='"+ request.getParameter("actividad")+ "' AND id_persona='" + request.getParameter("persona") + "' ");
+//            out.print("LECTURA: " + request.getParameter("actividad") + " - " + request.getParameter("persona"));
             if(contador>=1){ 
-                out.print("<div id='respuesta'>Actividad" + request.getParameter("actividad") + " modificada satisfactoriamente</div>");             
+                out.print("<div id='respuesta'>Actividad " + request.getParameter("actividad") + " modificada satisfactoriamente</div>");             
             }
             db.commit();
             db.desconectar();
